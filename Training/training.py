@@ -27,7 +27,7 @@ class TicTraining:
                 return 1
 
             self.board.set_board(move, currentPlayer)
-            winner = self.board.winner()
+            # winner = self.board.winner()
             # self.board.winner() Returns 0 if player 0 wins, 1 if Player 1 wins and -1 if No one won
 
             #if winner > - 0.1:
