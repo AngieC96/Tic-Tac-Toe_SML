@@ -2,11 +2,8 @@ from TicGame.tic_game import TicGame
 from Training.trainer import AITrainer
 from Training.training import TicTraining
 from Players.randomPlayer import RandomPlayer
-<<<<<<< HEAD
 from Players.greedyPlayer import GreedyPlayer
-=======
 from Players.randomMemory import RandomMemory
->>>>>>> 80788e52adbe2c22f60a7fb91081ca30326107e5
 
 SAMPLE_SIZE = 200
 CAPACITY = 1_000_000
@@ -25,7 +22,6 @@ EPS_DECAY: float = 1000
 UPDATE_TARGET_EVERY = 20
 STUPID_PLAYER_RANDOMNESS = 0
 
-<<<<<<< HEAD
 board_size = 3
 players = [RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), GreedyPlayer(board_size)]
 game = TicGame(players, board_size)
