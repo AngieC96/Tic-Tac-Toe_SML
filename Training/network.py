@@ -29,8 +29,8 @@ class Network:
             nn.Linear(2 * self.inputDimension,  self.inputDimension),
         )
         self.network.to(self.device)
-        torch.cuda.current_device()
-        print(torch.cuda.is_available())
+        # torch.cuda.current_device()
+        # print(torch.cuda.is_available())
         self.optimizer = optim.Adam(self.network.parameters(), lr=1e-4, weight_decay=1e-5)
         # self.optimizer = optim.SGD(self.network.parameters(), lr=1e-2, momentum=0.9)
 
@@ -54,9 +54,6 @@ class Network:
         criterion = torch.nn.MSELoss()
 
         states, actions, nextStates, rewards, dones = batch
-
-        # if sum(dones) > 0:
-        #    pass
 
         X = torch.tensor([el.tolist() for el in states]).to(self.device).float().reshape(-1, self.inputDimension)
         X_next = torch.tensor([el.tolist() for el in nextStates]).to(self.device)\

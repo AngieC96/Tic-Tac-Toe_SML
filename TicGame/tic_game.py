@@ -23,9 +23,9 @@ class TicGame:
 
             move = currentPlayer.get_move(self.board.vectorBoard)
 
-            while not self.is_valid(move):
-                currentPlayer.invalidMove()
-                move = currentPlayer.get_move(self.board.vectorBoard)
+            #while not self.is_valid(move):
+            #    currentPlayer.invalidMove()
+            #    move = currentPlayer.get_move(self.board.vectorBoard)
                 # print("Invalid Move")
 
             self.board.set_board(move, currentPlayer)

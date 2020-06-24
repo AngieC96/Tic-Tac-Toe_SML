@@ -6,9 +6,6 @@ from Training.replayMemory import ReplayMemory
 
 
 class AITrainer(Player):
-    rewardNoScore: float
-    rewardScored: float
-    rewardOpponentScored: float
     rewardInvalidMove: float
     rewardScoresInRow: float
     rewardWinning: float
@@ -18,15 +15,11 @@ class AITrainer(Player):
     invalid: bool
     model_network: Network
     target_network: Network
-    hidden: int
     replayMemory: ReplayMemory
     current_reward: int
-    score: int
     gamma: float
     fixed_batch: bool
     eps_greedy_value: float
-    softmax: bool
-    numgames: int
     eps_min: float
     decay: float
     double_q_interval: int
@@ -34,29 +27,25 @@ class AITrainer(Player):
 
     def __init__(self, board_size: int, rewardInvalidMove: float,
                  rewardWinning: float, rewardLosing: float, sample_size: int, capacity: int,
-                 gamma: float, numgames: int, eps_min: float, eps_decay: float, fixed_batch: bool = False,
+                 gamma: float, eps_min: float, eps_decay: float, fixed_batch: bool = False,
                  double_q_interval: int = 0):
 
         super().__init__(board_size)
-        self.rewardNoScore = 0
         self.rewardInvalidMove = rewardInvalidMove
         self.rewardWinning = rewardWinning
         self.rewardLosing = rewardLosing
         self.model_network = Network(board_size)
         self.target_network = Network(board_size)
         self.state = None
-        self.stateScore = None
         self.action = None
         self.invalid = False
         self.replayMemory = ReplayMemory(sample_size, capacity)
         self.current_reward = 0
-        self.score = 0
         self.gamma = gamma
         self.fixed_batch = fixed_batch
         self.eps_greedy_value = 1.
         self.eps_min = eps_min
         self.eps_decay = eps_decay
-        self.numgames = numgames
         self.double_q_interval = double_q_interval
         self.double_q_counter = 0
 
