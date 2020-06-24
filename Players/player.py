@@ -31,3 +31,9 @@ class Player:
 
     def update_target_network(self):
         pass
+
+    def win(self, nextState: np.array):
+        pass
+
+    def lose(self, nextState: np.array):
+        pass

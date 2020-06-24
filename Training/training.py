@@ -27,6 +27,14 @@ class TicTraining:
                 return 1
 
             self.board.set_board(move, currentPlayer)
+            winner = self.board.winner()
+            # self.board.winner() Returns 0 if player 0 wins, 1 if Player 1 wins and -1 if No one won
+
+            #if winner > - 0.1:
+                #self.players[winner].win()
+                #self.players[(winner + 1) % 2].lose()
+                #return
+
             if turn > 1:
                 otherPlayer.add_record(self.board.vectorBoard, done=False)
                 otherPlayer.train_model_network()
