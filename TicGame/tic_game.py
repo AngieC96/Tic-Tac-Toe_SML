@@ -29,13 +29,20 @@ class TicGame:
                 return 1
 
             self.board.set_board(move, currentPlayer)
-            turn += 1
+            winner = self.board.winner()    # Returns 0 if player 0 wins, 1 if Player 1 wins and -1 if No one won
 
+            if winner > - 0.1:  # if it is 0 or 1
+                self.players[winner].win()
+                self.players[(winner + 1) % 2].lose()
+                self.winner = True
+                self.board.print_board()
+                return True
+
+            turn += 1
             currentPlayer = self.players[turn % 2]
             otherPlayer = self.players[(turn + 1) % 2]
 
             self.board.print_board()
-        self.winner = self.board.winner()
 
         return 0
 
