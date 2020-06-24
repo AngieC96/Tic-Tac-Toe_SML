@@ -15,25 +15,27 @@ class Board:
 
     def winner(self) -> int:
         """Returns 0 if player 0 wins, 1 if Player 1 wins and -1 if No one won"""
-        if self.vectorBoard.zerowins(): return 0
-        if self.vectorBoard.twowins(): return 1
+        if self.player_0_wins():
+            return 0
+        if self.player_1_wins():
+            return 1
         return -1
 
-    def zerowins(self) -> bool:
+    def player_0_wins(self) -> bool:
         """Returns True if player 0 (symbol 1) won"""
-        return self.search_winning(np.ones(3).astype(self.vectorBoard))
+        return self.search_winning(np.ones(3))
 
-    def onewins(self)-> bool:
+    def player_1_wins(self)-> bool:
         """Returns True if player 1 (symbol -1) won"""
-        return self.search_winning(np.ones(3).astype(self.vectorBoard) * (-1))
+        return self.search_winning(np.ones(3))
 
 
     def search_winning(self, input: np.array) -> bool:
         v = self.vectorBoard.reshape([self.size, self.size])
-        rows = any([v[i].equal(input).all() for i in range(self.size)])
-        cols = any([v[:, i].equal(input).all() for i in range(self.size)])
-        diag = np.diagonal(v).equal(input)
-        other_diag = np.fliplr(v).diagonal().equal(input).all()
+        rows = any([np.equal(v[i], input).all() for i in range(self.size)])
+        cols = any([np.equal(v[:, i], input).all() for i in range(self.size)])
+        diag = np.equal(np.diagonal(v), input).all()
+        other_diag = np.equal(np.fliplr(v).diagonal(), input).all()
         return rows or cols or diag or other_diag
 
     def print_board(self) -> str:

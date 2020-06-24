@@ -31,7 +31,7 @@ class Network:
         self.network.to(self.device)
         # torch.cuda.current_device()
         # print(torch.cuda.is_available())
-        self.optimizer = optim.Adam(self.network.parameters(), lr=1e-4, weight_decay=1e-5)
+        self.optimizer = optim.Adam(self.network.parameters(), lr=1e-3, weight_decay=1e-5)
         # self.optimizer = optim.SGD(self.network.parameters(), lr=1e-2, momentum=0.9)
 
     def sample_action(self, Q_values: torch.tensor) -> int:

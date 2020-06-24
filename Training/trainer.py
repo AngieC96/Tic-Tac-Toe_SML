@@ -47,6 +47,7 @@ class AITrainer(Player):
         self.eps_decay = eps_decay
         self.double_q_interval = double_q_interval
         self.double_q_counter = 0
+        self.winner = False
 
     def get_random_valid_move(self, state: np.array) -> int:
         self.invalid = False
@@ -96,12 +97,17 @@ class AITrainer(Player):
     #     trained_network.take_weights(self.model_network)
     #     return AIPlayer(id_number, self.boardsize, trained_network)
 
-    def win(self, nextState: np.array):
+    def win(self):
         self.replayMemory.add_record(self.state, self.action, self.final_state,
                                      self.rewardWinning, done=True)
         self.train_model_network()
+        self.winner = True
 
-    def lose(self, nextState: np.array):
+    def lose(self):
         self.replayMemory.add_record(self.state, self.action, self.final_state,
                                      self.rewardLosing, done=True)
         self.train_model_network()
+        self.winner = False
+
+    def add_record(self, next_game_state: np.array, done: bool):
+        self.replayMemory.add_record(self.state, self.action, next_game_state, reward=0, done=done)

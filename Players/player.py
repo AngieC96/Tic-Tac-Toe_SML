@@ -9,6 +9,7 @@ class Player:
     def __init__(self, board_size: int):
         self.id = None
         self.boardSize = board_size
+        self.winner = False
 
     @abc.abstractmethod
     def get_move(self, state: np.array):
@@ -32,8 +33,8 @@ class Player:
     def update_target_network(self):
         pass
 
-    def win(self, nextState: np.array):
-        pass
+    def win(self):
+        self.winner = True
 
-    def lose(self, nextState: np.array):
-        pass
+    def lose(self):
+        self.winner = False
