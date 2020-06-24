@@ -27,7 +27,7 @@ class Board:
 
     def player_1_wins(self)-> bool:
         """Returns True if player 1 (symbol -1) won"""
-        return self.search_winning(np.ones(3))
+        return self.search_winning(np.ones(3)*(-1))
 
 
     def search_winning(self, input: np.array) -> bool:

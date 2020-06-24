@@ -10,8 +10,8 @@ CAPACITY = 1_000_000
 HIDDEN = 30
 GAMMA = 0.5
 
-REWARD_INVALID_SCORE: float = -5
-REWARD_WIN = 1
+REWARD_INVALID_SCORE: float = -50
+REWARD_WIN = 10
 REWARD_LOSE = -1
 FIXED_BATCH = False
 only_valid_moves = True
@@ -36,6 +36,11 @@ count_win = 0
 count_draws = 0
 count_lose = 0
 
+for i in range(200):
+    game_memory.play()
+    game_memory.reset()
+    game_memory.players = [game_memory.players[1], game_memory.players[0]]
+
 for i in range(NUM_GAMES):
     game_memory.play()
     game_memory.reset()
@@ -57,4 +62,6 @@ for i in range(NUM_GAMES):
         count_lose = 0
 
     game.reset()
+    game.players=[game.players[i%2], game.players[(i+1)%2]]
+    game_memory.players = [game_memory.players[i%2], game_memory.players[(i+1)%2]]
 
