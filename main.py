@@ -56,6 +56,10 @@ for i in range(NUM_GAMES):
         print("invalid: ", count_invalid)
         print("wins, draws, losses ", count_win, count_draws, count_lose)
         print("loss: ", trainer.model_network.loss)
+
+        if count_win==10:
+            trainer.model_network.save_weights("vincente")
+
         count_invalid = 0
         count_win = 0
         count_draws = 0
