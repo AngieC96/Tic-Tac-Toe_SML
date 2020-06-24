@@ -4,7 +4,7 @@ import abc
 
 class Player:
     id: int  # player identifier
-    boardsize: int  # grid size
+    boardSize: int  # grid size
 
     def __init__(self, board_size: int):
         self.id = None

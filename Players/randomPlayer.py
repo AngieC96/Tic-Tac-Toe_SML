@@ -4,7 +4,7 @@ import numpy as np
 
 class RandomPlayer(Player):
 
-    def __init__(self, boardsize: int, randomness: float = 0):
+    def __init__(self, boardsize: int, randomness: float = 1):
         super().__init__(boardsize)
         self.randomness = randomness
 
