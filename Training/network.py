@@ -18,15 +18,15 @@ class Network:
         self.network = nn.Sequential(
             nn.Linear(self.inputDimension, 2*self.inputDimension),
             nn.LeakyReLU(),
-            nn.Linear(2*self.inputDimension, 2*self.inputDimension),
-            nn.LeakyReLU(),
-            nn.Linear(2*self.inputDimension, 2*self.inputDimension),
-            nn.LeakyReLU(),
-            nn.Linear(2 * self.inputDimension, 2 * self.inputDimension),
-            nn.LeakyReLU(),
-            nn.Linear(2 * self.inputDimension, 2 * self.inputDimension),
-            nn.LeakyReLU(),
-            nn.Linear(2 * self.inputDimension,  self.inputDimension),
+            nn.Linear(2*self.inputDimension, self.inputDimension),
+            # nn.LeakyReLU(),
+            # nn.Linear(2*self.inputDimension, self.inputDimension),
+            # nn.LeakyReLU(),
+            # nn.Linear(2 * self.inputDimension, 2 * self.inputDimension),
+            # nn.LeakyReLU(),
+            # nn.Linear(2 * self.inputDimension, 2 * self.inputDimension),
+            # nn.LeakyReLU(),
+            # nn.Linear(2 * self.inputDimension,  self.inputDimension),
         )
         self.network.to(self.device)
         # torch.cuda.current_device()
