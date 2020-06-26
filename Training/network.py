@@ -43,11 +43,6 @@ class Network:
             Q_values = torch.flatten(self.network(X)).to(self.device)
         action = self.sample_action(Q_values)
 
-        # if self.only_valid_actions:
-        #     while state[action] == 1:
-        #         Q_values[action] = torch.min(Q_values).item() - 100
-        #         action = self.sample_action(Q_values)
-
         return action
 
     def update_weights(self, batch: tuple, gamma: float, target_network):

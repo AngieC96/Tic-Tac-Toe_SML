@@ -7,13 +7,13 @@ from Players.randomMemory import RandomMemory
 SAMPLE_SIZE = 200
 CAPACITY = 1_000_000
 
-GAMMA = 0.5
+GAMMA = 0.9
 REWARD_INVALID_SCORE: float = -50
 REWARD_WIN = 10
 REWARD_LOSE = -1
 FIXED_BATCH = False
 EPS_MIN: float = 0.1
-NUM_GAMES = 15_000
+NUM_GAMES = 50_000
 EPS_DECAY: float = 1000
 UPDATE_TARGET_EVERY = 20
 STUPID_PLAYER_RANDOMNESS = 1
@@ -23,9 +23,11 @@ board_size = 3
 
 trainer = AITrainer(board_size, REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, SAMPLE_SIZE, CAPACITY, GAMMA,
                     EPS_MIN, EPS_DECAY, fixed_batch=FIXED_BATCH, double_q_interval=UPDATE_TARGET_EVERY)
+trainer.model_network.load_weights("pesi_angela.pt")
+trainer.target_network.load_weights("pesi_angela.pt")
 randomMemoryPlayer = RandomMemory(board_size,REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, trainer.replayMemory)
-
 players = [RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), trainer]
+
 game = TicTraining(players, board_size)
 game_memory = TicTraining([RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS),randomMemoryPlayer],board_size )
 count_invalid = 0
@@ -41,7 +43,7 @@ count_lose = 0
 wins = []
 invalids = []
 num_wins = 0
-for i in range(NUM_GAMES):
+for i in range(1, NUM_GAMES):
 
     game_memory.play()
     game_memory.reset()
@@ -53,15 +55,16 @@ for i in range(NUM_GAMES):
     else: count_invalid += 1    #invalid move
     wins.append(count_win)
     invalids.append(count_invalid)
-    if i % 10 == 0 and i > 0:
+    if i % 10 == 0:
         print(i)
         print("invalid: ", count_invalid)
         print("wins, draws, losses ", count_win, count_draws, count_lose)
         print("loss: ", trainer.model_network.loss)
 
-        #if count_invalid == 0:
+        if count_invalid == 0:
             # print(invalids)
-            #trainer.model_network.save_weights("vincente")
+            #print(wins)
+            trainer.model_network.save_weights("pesi_angela")
 
         count_invalid = 0
         count_win = 0
