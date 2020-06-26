@@ -50,6 +50,7 @@ class AITrainer(Player):
         self.winner = False
 
     def get_random_valid_move(self, state: np.array) -> int:
+        self.invalid = False
         validMoves = np.flatnonzero(state == 0)
         self.action = np.random.choice(validMoves)
         return self.action
