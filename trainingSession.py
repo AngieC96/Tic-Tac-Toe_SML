@@ -7,16 +7,15 @@ from Players.randomMemory import RandomMemory
 SAMPLE_SIZE = 200
 CAPACITY = 1_000_000
 
-GAMMA = 0.5
+GAMMA = 0.1
 REWARD_INVALID_SCORE: float = -50
 REWARD_WIN = 10
 REWARD_LOSE = -1
 FIXED_BATCH = False
-only_valid_moves = True
-EPS_MIN: float = 0.1
+EPS_MIN: float = 0.05
 NUM_GAMES = 15_000
 EPS_DECAY: float = 1000
-UPDATE_TARGET_EVERY = 20
+UPDATE_TARGET_EVERY = 50
 STUPID_PLAYER_RANDOMNESS = 0
 
 
@@ -62,7 +61,7 @@ for i in range(NUM_GAMES):
 
         if count_win == 10:
 
-            trainer.model_network.save_weights("pesi_angela")
+            trainer.model_network.save_weights("pesi_simone")
 
         count_invalid = 0
         count_win = 0

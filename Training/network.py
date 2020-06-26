@@ -13,7 +13,7 @@ class Network:
     def __init__(self, board_size: int):
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.loss = 0
-        self.inputDimension = board_size**2
+        self.inputDimension = board_size ** 2
         self.hidden = 10
         self.network = nn.Sequential(
             nn.Linear(self.inputDimension, 2*self.inputDimension),
@@ -31,7 +31,7 @@ class Network:
         self.network.to(self.device)
         # torch.cuda.current_device()
         # print(torch.cuda.is_available())
-        self.optimizer = optim.Adam(self.network.parameters(), lr=1e-3, weight_decay=1e-5)
+        self.optimizer = optim.Adam(self.network.parameters(), lr=1e-6, weight_decay=1e-5)
         # self.optimizer = optim.SGD(self.network.parameters(), lr=1e-2, momentum=0.9)
 
     def sample_action(self, Q_values: torch.tensor) -> int:
