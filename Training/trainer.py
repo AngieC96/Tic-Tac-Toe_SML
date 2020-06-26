@@ -111,3 +111,6 @@ class AITrainer(Player):
 
     def add_record(self, next_game_state: np.array, done: bool):
         self.replayMemory.add_record(self.state, self.action, next_game_state, reward=0, done=done)
+
+    def __str__(self):
+        return "AI player [id: "+str(self.id)+"]"

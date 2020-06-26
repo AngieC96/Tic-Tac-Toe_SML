@@ -23,4 +23,4 @@ class GreedyPlayer(Player):
         return np.random.choice(validMoves)
 
     def __str__(self):
-        return "Random player"+str(self.id)
+        return "Greedy player"+str(self.id)

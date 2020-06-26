@@ -22,6 +22,15 @@ aiplayer = AITrainer(board_size, REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, 
 aiplayer.model_network.load_weights(file="pesi_angela.pt")
 players = [RandomPlayer(board_size), aiplayer]
 game = TicGame(players, board_size)
-game.play()
-print("The winner is ", players[1].__str__() if aiplayer.winner else players[0].__str__())
+
+if not game.play():
+    print("AI made an illegal move!")
+else:
+    if players[1].winner:
+        print("The winner is ", players[1].__str__())
+    if players[0].winner:
+        print("The winner is ", players[0].__str__())
+    else:
+        print("Draw")
+
 game.reset()
