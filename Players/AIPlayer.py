@@ -1,18 +1,18 @@
 from Players.player import Player
-from Training import network
+from Training.network import Network
 import numpy as np
 
 
 class AIPlayer(Player):
     score: int
     invalid: bool
-    network: network
+    network: Network
 
-    def __init__(self, boardsize: int, network: network):
+    def __init__(self, boardsize: int):
         super().__init__(boardsize)
         self.score = 0
         self.invalid = False
-        self.network = network
+        self.network = Network(boardsize)
         self.network.network.eval()
         self.otherPlayer = None
 

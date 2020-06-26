@@ -19,9 +19,8 @@ UPDATE_TARGET_EVERY = 200
 
 board_size = 3
 
-net = Network(board_size)
-net.load_weights(file="pesi_angela.pt")
-aiplayer = AIPlayer(board_size, net)
+aiplayer = AIPlayer(board_size)
+aiplayer.network.load_weights(file="pesi_angela.pt")
 players = [RandomPlayer(board_size), aiplayer]
 game = TicGame(players, board_size)
 
@@ -30,7 +29,7 @@ if not game.play():
 else:
     if players[1].winner:
         print("The winner is ", players[1].__str__())
-    if players[0].winner:
+    elif players[0].winner:
         print("The winner is ", players[0].__str__())
     else:
         print("Draw")

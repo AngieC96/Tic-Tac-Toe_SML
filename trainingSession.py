@@ -2,6 +2,7 @@ from TicGame.tic_game import TicGame
 from Training.trainer import AITrainer
 from Training.training import TicTraining
 from Players.randomPlayer import RandomPlayer
+from Players.greedyPlayer import GreedyPlayer
 from Players.randomMemory import RandomMemory
 
 SAMPLE_SIZE = 200
@@ -25,11 +26,12 @@ trainer = AITrainer(board_size, REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, S
                     EPS_MIN, EPS_DECAY, fixed_batch=FIXED_BATCH, double_q_interval=UPDATE_TARGET_EVERY)
 trainer.model_network.load_weights("pesi_angela.pt")
 trainer.target_network.load_weights("pesi_angela.pt")
-randomMemoryPlayer = RandomMemory(board_size,REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, trainer.replayMemory)
-players = [RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), trainer]
+randomMemoryPlayer = RandomMemory(board_size, REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, trainer.replayMemory)
+#players = [RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), trainer]
+players = [GreedyPlayer(board_size), trainer]
 
 game = TicTraining(players, board_size)
-game_memory = TicTraining([RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS),randomMemoryPlayer],board_size )
+game_memory = TicTraining([RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), randomMemoryPlayer], board_size)
 count_invalid = 0
 count_win = 0
 count_draws = 0
