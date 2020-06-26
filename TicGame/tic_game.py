@@ -8,6 +8,7 @@ class TicGame:
         self.players = players
         self.players[0].id = 1
         self.players[1].id = -1
+        self.winner = None
 
     def is_valid(self, idx: int) -> bool:
         return self.board.vectorBoard[idx] == 0
@@ -23,18 +24,29 @@ class TicGame:
 
             move = currentPlayer.get_move(self.board.vectorBoard)
 
-            #while not self.is_valid(move):
-            #    currentPlayer.invalidMove()
-            #    move = currentPlayer.get_move(self.board.vectorBoard)
-                # print("Invalid Move")
+            if not self.is_valid(move):
+                self.winner = -1
+                return 1
 
             self.board.set_board(move, currentPlayer)
-            turn += 1
+            winner = self.board.winner()    # Returns 0 if player 0 wins, 1 if Player 1 wins and -1 if No one won
 
+            if winner > - 0.1:  # if it is 0 or 1
+                self.players[winner].win()
+                self.players[(winner + 1) % 2].lose()
+                self.winner = True
+                self.board.print_board()
+                return True
+
+            turn += 1
             currentPlayer = self.players[turn % 2]
             otherPlayer = self.players[(turn + 1) % 2]
 
             self.board.print_board()
-        self.board.reset()
 
-        print("Winner : ")
+        return 0
+
+
+    def reset(self):
+        self.board.reset()
+        self.winner = None

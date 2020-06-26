@@ -7,7 +7,6 @@ from Training.replayMemory import ReplayMemory
 
 class AITrainer(Player):
     rewardInvalidMove: float
-    rewardScoresInRow: float
     rewardWinning: float
     rewardLosing: float
     state: np.array
@@ -16,7 +15,6 @@ class AITrainer(Player):
     model_network: Network
     target_network: Network
     replayMemory: ReplayMemory
-    current_reward: int
     gamma: float
     fixed_batch: bool
     eps_greedy_value: float
@@ -31,16 +29,17 @@ class AITrainer(Player):
                  double_q_interval: int = 0):
 
         super().__init__(board_size)
+        self.rewardNoScore = 0
         self.rewardInvalidMove = rewardInvalidMove
         self.rewardWinning = rewardWinning
         self.rewardLosing = rewardLosing
         self.model_network = Network(board_size)
         self.target_network = Network(board_size)
         self.state = None
+        self.final_state = np.ones(board_size ** 2) * 5
         self.action = None
         self.invalid = False
         self.replayMemory = ReplayMemory(sample_size, capacity)
-        self.current_reward = 0
         self.gamma = gamma
         self.fixed_batch = fixed_batch
         self.eps_greedy_value = 1.
@@ -48,6 +47,7 @@ class AITrainer(Player):
         self.eps_decay = eps_decay
         self.double_q_interval = double_q_interval
         self.double_q_counter = 0
+        self.winner = False
 
     def get_random_valid_move(self, state: np.array) -> int:
         self.invalid = False
@@ -72,20 +72,9 @@ class AITrainer(Player):
         self.eps_greedy_value = self.eps_min + (1 - self.eps_min) * np.exp(- self.eps_decay * iteration)
 
     def invalidMove(self):
-        self.replayMemory.add_record(self.state, self.action, np.ones(len(self.state))*5,
+        self.replayMemory.add_record(self.state, self.action, self.final_state,
                                      self.rewardInvalidMove, done=True)
         self.train_model_network()
-
-    def endGameReward(self, win: bool):
-        if win:
-            self.current_reward += self.rewardWinning
-        else:
-            self.current_reward += self.rewardLosing
-
-    def add_record(self, next_state: np.array, done: bool):
-        self.replayMemory.add_record(self.state, self.action, next_state.copy(), self.current_reward, done)
-
-
 
     def train_model_network(self):
         if self.replayMemory.size < self.replayMemory.sampleSize:
@@ -108,18 +97,17 @@ class AITrainer(Player):
     #     trained_network.take_weights(self.model_network)
     #     return AIPlayer(id_number, self.boardsize, trained_network)
 
-    def store_in_memory(self, state: np.array, nextState: np.array, action: int, done: bool):
-        if self.fixed_batch:
-            if self.replayMemory.size < self.replayMemory.sampleSize:
-                self.replayMemory.add_record(self.state_with_score(state), action,
-                                             self.next_state_with_score(nextState), self.current_reward, done)
-        else:
-            self.replayMemory.add_record(self.state_with_score(state), action,
-                                         self.next_state_with_score(nextState), self.current_reward, done)
-        self.current_reward = 0
+    def win(self):
+        self.replayMemory.add_record(self.state, self.action, self.final_state,
+                                     self.rewardWinning, done=True)
+        self.train_model_network()
+        self.winner = True
 
-    def state_with_score(self, state: np.array):
-        return np.append(state, self.stateScore)
+    def lose(self):
+        self.replayMemory.add_record(self.state, self.action, self.final_state,
+                                     self.rewardLosing, done=True)
+        self.train_model_network()
+        self.winner = False
 
-    def next_state_with_score(self, nextState: np.array):
-        return np.append(nextState, self.score_value())
+    def add_record(self, next_game_state: np.array, done: bool):
+        self.replayMemory.add_record(self.state, self.action, next_game_state, reward=0, done=done)
