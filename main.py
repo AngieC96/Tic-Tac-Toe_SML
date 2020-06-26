@@ -36,10 +36,10 @@ count_win = 0
 count_draws = 0
 count_lose = 0
 
-for i in range(200):
-    game_memory.play()
-    game_memory.reset()
-    game_memory.players = [game_memory.players[1], game_memory.players[0]]
+# for i in range(200):
+#     game_memory.play()
+#     game_memory.reset()
+#     game_memory.players = [game_memory.players[1], game_memory.players[0]]
 
 wins = []
 invalids = []
@@ -59,12 +59,12 @@ for i in range(NUM_GAMES):
     if i % 10 == 0 and i > 0:
         print(i)
         print("invalid: ", count_invalid)
-        print("wins, draws, losses ", count_win, count_draws, count_lose)
-        print("loss: ", trainer.model_network.loss)
+        # print("wins, draws, losses ", count_win, count_draws, count_lose)
+        # print("loss: ", trainer.model_network.loss)
 
-        if count_win == 10:
-
-            trainer.model_network.save_weights("vincente")
+        if count_invalid  == 0:
+            print(invalids)
+            #trainer.model_network.save_weights("vincente")
 
         count_invalid = 0
         count_win = 0
