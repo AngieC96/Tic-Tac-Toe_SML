@@ -57,16 +57,16 @@ class AITrainer(Player):
 
     def get_move(self, state: np.array) -> int:
         self.state = state.copy()
-        self.action = self.model_network.get_action(self.state)
-        return self.action
-        # if np.random.rand() > self.eps_greedy_value:
-        #     if not self.invalid:
-        #         self.action = self.model_network.get_action(self.state)
-        #         return self.action
-        #     else:
-        #         return self.get_random_valid_move(state)
-        # else:
-        #     return self.get_random_valid_move(state)
+        # self.action = self.model_network.get_action(self.state)
+        # return self.action
+        if np.random.rand() > self.eps_greedy_value:
+            if not self.invalid:
+                self.action = self.model_network.get_action(self.state)
+                return self.action
+            else:
+                return self.get_random_valid_move(state)
+        else:
+            return self.get_random_valid_move(state)
 
     def update_eps(self, iteration: int):
         self.eps_greedy_value = self.eps_min + (1 - self.eps_min) * np.exp(- self.eps_decay * iteration)
