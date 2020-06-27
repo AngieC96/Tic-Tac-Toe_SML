@@ -8,18 +8,24 @@ from csv import writer
 SAMPLE_SIZE = 200 #1024 * 5
 CAPACITY = 1_000_000
 
-HIDDEN = 30
-GAMMA = 0.1
+
+GAMMA = 0.5
+
 
 REWARD_INVALID_SCORE: float = -10
 REWARD_WIN = 1
 REWARD_LOSE = -1
-FIXED_BATCH = False
-only_valid_moves = True
 EPS_MIN: float = 0.05
-NUM_GAMES = 25_000
+NUM_GAMES = 50_000
 EPS_DECAY: float = 1000
 UPDATE_TARGET_EVERY = 100
+
+
+
+
+FIXED_BATCH = False
+only_valid_moves = True
+
 STUPID_PLAYER_RANDOMNESS = 1
 
 boardsize = 3
