@@ -40,10 +40,10 @@ count_win = 0
 count_draws = 0
 count_lose = 0
 
-# for i in range(200):
-#     game_memory.play()
-#     game_memory.reset()
-#     game_memory.players = [game_memory.players[1], game_memory.players[0]]
+for i in range(100_000):
+    game_memory.play()
+    game_memory.reset()
+    game_memory.players = [game_memory.players[1], game_memory.players[0]]
 
 wins = []
 invalids = []

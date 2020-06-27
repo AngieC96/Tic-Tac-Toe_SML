@@ -19,10 +19,10 @@ UPDATE_TARGET_EVERY = 200
 
 board_size = 3
 
-#aiplayer = AIPlayer(board_size)
-#aiplayer.network.load_weights(file="pesi_angela.pt")
-#players = [RandomPlayer(board_size), aiplayer]
-players = [GreedyPlayer(board_size), GreedyPlayer(board_size)]
+aiplayer = AIPlayer(board_size)
+aiplayer.network.load_weights(file="pesi_angela.pt")
+players = [RandomPlayer(board_size), aiplayer]
+#players = [GreedyPlayer(board_size), GreedyPlayer(board_size)]
 game = TicGame(players, board_size)
 
 if not game.play():
