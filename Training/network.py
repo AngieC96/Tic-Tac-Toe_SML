@@ -16,9 +16,11 @@ class Network:
         self.inputDimension = board_size**2
         self.hidden = 10
         self.network = nn.Sequential(
-            nn.Linear(self.inputDimension, 2*self.inputDimension),
+            nn.Linear(self.inputDimension, 256),
+            nn.Linear(256, 64),
             nn.LeakyReLU(),
-            nn.Linear(2*self.inputDimension, self.inputDimension),
+            nn.Linear(64, self.inputDimension)
+
             # nn.LeakyReLU(),
             # nn.Linear(self.inputDimension, self.inputDimension),
             # nn.LeakyReLU(),
@@ -34,20 +36,16 @@ class Network:
         self.optimizer = optim.Adam(self.network.parameters(), lr=1e-4, weight_decay=1e-5)
         # self.optimizer = optim.SGD(self.network.parameters(), lr=1e-2, momentum=0.9)
 
-    def sample_action(self, Q_values: torch.tensor) -> int:
-        return torch.argmax(torch.flatten(Q_values)).item()
+    # def sample_action(self, Q_values: torch.tensor) -> int:
+    #     return torch.argmax(torch.flatten(Q_values)).item()
 
     def get_action(self, state: np.array) -> int:
         X = torch.from_numpy(state).to(self.device).reshape(1, self.inputDimension).type(dtype=torch.float32)
         with torch.no_grad():
             Q_values = torch.flatten(self.network(X)).to(self.device)
-        action = self.sample_action(Q_values)
-
-        # if self.only_valid_actions:
-        #     while state[action] == 1:
-        #         Q_values[action] = torch.min(Q_values).item() - 100
-        #         action = self.sample_action(Q_values)
-
+        condition = (X == 0).to(self.device)
+        Q_values = Q_values.where(condition, torch.tensor(-10.0).to(self.device)).to(self.device)
+        action = torch.argmax(torch.flatten(Q_values)).item()
         return action
 
     def update_weights(self, batch: tuple, gamma: float, target_network):
@@ -65,10 +63,15 @@ class Network:
         rewards = torch.tensor(rewards).to(self.device)
         dones = torch.tensor(dones, dtype=int).to(self.device)
         for i in range(5):
-            curr_Q = self.network(X).gather(1, actions.unsqueeze(1)).to(self.device).squeeze(1)
+            curr_Q = self.network(X).to(self.device)
+            condition = (X == 0).to(self.device)
+            curr_Q = curr_Q.where(condition, torch.tensor(-10.0).to(self.device)).to(self.device)
+            curr_Q = curr_Q.gather(1, actions.unsqueeze(1)).to(self.device).squeeze(1)
 
             with torch.no_grad():
                 next_Q = target_network.network(X_next).to(self.device)
+                condition = (X_next == 0).to(self.device)
+                next_Q = next_Q.where(condition, torch.tensor(-10.0).to(self.device)).to(self.device)
                 max_next_Q = torch.max(next_Q, 1)[0]
                 expected_Q = (rewards + (1 - dones) * gamma * max_next_Q).to(self.device)
 
@@ -78,6 +81,9 @@ class Network:
             loss.backward()
             #torch.nn.utils.clip_grad_norm_(self.network.parameters(), 1)
             self.optimizer.step()
+
+    def valids(self,condition,tens):
+        pass
 
     def take_weights(self, model_network):
         self.network.load_state_dict(model_network.network.state_dict())

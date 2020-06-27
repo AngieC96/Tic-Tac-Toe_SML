@@ -46,9 +46,9 @@ class RandomMemory(Player):
         self.winner = True
 
     def lose(self):
-        self.replayMemory.add_record(self.state, self.action, self.final_state,
+        self.replayMemory.add_record(self.state.copy(), self.action, self.final_state,
                                      self.rewardLosing, done=True)
         self.winner = False
 
     def add_record(self, next_game_state: np.array, done: bool):
-        self.replayMemory.add_record(self.state, self.action, next_game_state.copy(), reward=0, done=done)
+        self.replayMemory.add_record(self.state.copy(), self.action, next_game_state.copy(), reward=0, done=done)

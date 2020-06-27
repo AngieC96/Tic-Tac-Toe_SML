@@ -9,15 +9,15 @@ SAMPLE_SIZE = 200 #1024 * 5
 CAPACITY = 1_000_000
 
 
-GAMMA = 0.5
+GAMMA = 0.99
 
 
-REWARD_INVALID_SCORE: float = -10
+REWARD_INVALID_SCORE: float = 0
 REWARD_WIN = 1
 REWARD_LOSE = -1
-EPS_MIN: float = 0.05
+EPS_MIN: float = 0.01
 NUM_GAMES = 50_000
-EPS_DECAY: float = 1000
+EPS_DECAY: float = 0.001
 UPDATE_TARGET_EVERY = 100
 
 
@@ -35,9 +35,9 @@ trainer = AITrainer(boardsize, REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, SA
                     EPS_MIN, EPS_DECAY, fixed_batch=FIXED_BATCH, double_q_interval=UPDATE_TARGET_EVERY)
 randomMemoryPlayer =RandomMemory(boardsize,REWARD_INVALID_SCORE, REWARD_WIN, REWARD_LOSE, trainer.replayMemory)
 board_size = 3
-players = [RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS), trainer]
+players = [trainer,RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS)]
 game = TicTraining(players, board_size)
-game_memory = TicTraining([RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS),randomMemoryPlayer],boardsize )
+game_memory = TicTraining([randomMemoryPlayer,RandomPlayer(board_size, STUPID_PLAYER_RANDOMNESS)], boardsize )
 count_invalid = 0
 count_win = 0
 count_draws = 0
@@ -55,11 +55,8 @@ draw = []
 loss_list = []
 num_wins = 0
 for i in range(NUM_GAMES):
-
-
-
-    game_memory.play()
-    game_memory.reset()
+    # game_memory.play()
+    # game_memory.reset()
     if game.play():             #no invalid moves
         if game.winner == True:
             if trainer.winner == True: count_win += 1
@@ -73,29 +70,28 @@ for i in range(NUM_GAMES):
     loss_list.append(trainer.model_network.loss)
     if i % 100 == 0 and i > 0:
         print(i)
-        print("invalid: ", count_invalid)
-        print("wins, draws, losses ", count_win, count_draws, count_lose)
-        print("loss: ", trainer.model_network.loss)
+        print("invalid: ", count_invalid,"eps ", trainer.eps_greedy_value, "w, d, l ",
+              count_win, count_draws, count_lose, "loss: ", trainer.model_network.loss)
 
-        if count_invalid  == 0:
-            # print(invalids)
-            trainer.model_network.save_weights("vincente")
+        # if count_invalid == 0:
+        #     # print(invalids)
+        #     trainer.model_network.save_weights("vincente")
 
-        with open("wins.csv",'w', newline='') as w:
-            csv_writer = writer(w)
-            csv_writer.writerow(wins)
-        with open("invalids.csv",'w',newline='') as w:
-            csv_writer = writer(w)
-            csv_writer.writerow(invalids)
-        with open("lose.csv",'w',newline='') as w:
-            csv_writer = writer(w)
-            csv_writer.writerow(lose)
-        with open("draw.csv",'w',newline='') as w:
-            csv_writer = writer(w)
-            csv_writer.writerow(draw)
-        with open("loss_list.csv",'w',newline='') as w:
-            csv_writer = writer(w)
-            csv_writer.writerow(loss_list)
+        # with open("wins.csv",'w', newline='') as w:
+        #     csv_writer = writer(w)
+        #     csv_writer.writerow(wins)
+        # with open("invalids.csv",'w',newline='') as w:
+        #     csv_writer = writer(w)
+        #     csv_writer.writerow(invalids)
+        # with open("lose.csv",'w',newline='') as w:
+        #     csv_writer = writer(w)
+        #     csv_writer.writerow(lose)
+        # with open("draw.csv",'w',newline='') as w:
+        #     csv_writer = writer(w)
+        #     csv_writer.writerow(draw)
+        # with open("loss_list.csv",'w',newline='') as w:
+        #     csv_writer = writer(w)
+        #     csv_writer.writerow(loss_list)
 
         count_invalid = 0
         count_win = 0
@@ -104,5 +100,6 @@ for i in range(NUM_GAMES):
 
 
     game.reset()
-    game.players=[game.players[i%2], game.players[(i+1)%2]]
-    game_memory.players = [game_memory.players[i%2], game_memory.players[(i+1)%2]]
+    trainer.update_eps(i)
+    # game.players=[game.players[i%2], game.players[(i+1)%2]]
+    #game_memory.players = [game_memory.players[i%2], game_memory.players[(i+1)%2]]
