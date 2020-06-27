@@ -25,7 +25,7 @@ STUPID_PLAYER_RANDOMNESS = 1
 board_size = 3
 
 aiplayer = AIPlayer(board_size)
-aiplayer.network.load_weights(file="vincente.pt")
+aiplayer.network.load_weights(file="pesi_vincente.pt")
 players = [RandomPlayer(board_size), aiplayer]
 #players = [GreedyPlayer(board_size), GreedyPlayer(board_size)]
 game = TicGame(players, board_size)
