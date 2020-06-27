@@ -7,6 +7,7 @@ class RandomPlayer(Player):
     def __init__(self, boardsize: int, randomness: float = 1):
         super().__init__(boardsize)
         self.randomness = randomness
+        self.id = -1
 
     def get_move(self, board: np.array) -> int:
         validMoves = np.flatnonzero(board == 0)

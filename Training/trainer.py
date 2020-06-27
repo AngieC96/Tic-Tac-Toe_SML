@@ -48,6 +48,7 @@ class AITrainer(Player):
         self.double_q_interval = double_q_interval
         self.double_q_counter = 0
         self.winner = False
+        self.id = 1
 
     def get_random_valid_move(self, state: np.array) -> int:
         self.invalid = False

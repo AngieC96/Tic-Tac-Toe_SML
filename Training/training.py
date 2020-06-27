@@ -6,8 +6,6 @@ class TicTraining:
         self.boardSize = board_size
         self.board = Board(board_size)
         self.players = players
-        self.players[0].id = 1
-        self.players[1].id = -1
         self.winner = False
 
     def is_valid(self, idx: int) -> bool:
