@@ -16,4 +16,4 @@ class RandomPlayer(Player):
         return min(validMoves)
 
     def __str__(self):
-        return "Random player"+str(self.id)
+        return "Random player [id: "+str(self.id)+"]"

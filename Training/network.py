@@ -32,8 +32,8 @@ class Network:
             # nn.Linear(2 * self.inputDimension,  self.inputDimension),
         )
         self.network.to(self.device)
-        torch.cuda.current_device()
-        print(torch.cuda.is_available())
+        #torch.cuda.current_device()
+        #print(torch.cuda.is_available())
         self.optimizer = optim.Adam(self.network.parameters(), lr=1e-4, weight_decay=1e-5)
         # self.optimizer = optim.SGD(self.network.parameters(), lr=1e-2, momentum=0.9)
 
@@ -90,7 +90,7 @@ class Network:
         self.network.load_state_dict(model_network.network.state_dict())
 
     def load_weights(self, file):
-        self.network.load_state_dict(torch.load(file))
+        self.network.load_state_dict(torch.load(file, map_location = self.device))
 
     def save_weights(self, filename: str):
         torch.save(self.network.state_dict(), filename + '.pt')
